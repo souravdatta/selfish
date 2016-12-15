@@ -1,0 +1,24 @@
+#lang typed/racket
+
+(require selfish)
+
+(define-object personnel
+  [name : String "" #:settable]
+  [address : (Listof String) empty])
+
+(define-object shield-personnel
+  (prototype (clone personnel))
+  [id : Integer])
+
+(define-message hello
+  [o : personnel]
+  ([message : String])
+  (format "~a ~a" "hello" (-> name o)))
+
+(define-message change-name
+  [o : personnel]
+  ([new-name : String] [new-prefix : String "Mr."])
+  (-> name o (format "~a ~a" new-prefix new-name)))
+
+(-> shield-personnel change-name "Robot") #| ===> void |#
+(-> shield-personnel hello) #| ===> "hello Mr. Robot" |#
